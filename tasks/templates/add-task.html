@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task - MasterTask</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --accent: #FF5722;
+            --background: #F3F4F6;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border-color: #E0E0E0;
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #e0f7fa, #ffe0b2);
+            color: var(--text-primary);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(255, 255, 255, 0.9);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(76, 175, 80, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-links a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .add-task-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .task-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-card h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f4f6f9;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .priority-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .priority-option {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            background: #fff;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .priority-option.low {
+            color: #2e7d32;
+        }
+
+        .priority-option.medium {
+            color: #ef6c00;
+        }
+
+        .priority-option.high {
+            color: #c62828;
+        }
+
+        .priority-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 1rem 0.5rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                justify-content: center;
+            }
+
+            .logo span {
+                display: none;
+            }
+
+            .nav-links a span {
+                display: none;
+            }
+
+            .nav-links a {
+                justify-content: center;
+                padding: 1rem 0;
+            }
+
+            .nav-links a i {
+                margin: 0;
+                font-size: 1.25rem;
+            }
+
+            .main-content {
+                margin-left: 60px;
+                width: calc(100% - 60px);
+                padding: 1rem;
+            }
+
+            .priority-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="/dashboard/" class="logo">
+            <i class="fas fa-check-circle"></i>
+            <span>MasterTask</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/dashboard/"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="/add-task/"><i class="fas fa-plus"></i> <span>Add Task</span></a></li>
+            <li><a href="/reports/"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+            <li><a href="/profile/"><i class="fas fa-user"></i> <span>Profile</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="add-task-container">
+            <div class="task-card">
+                <h2><i class="fas fa-plus-circle"></i> Add New Task</h2>
+                <form method="POST" action="{% url 'add_task' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="task">Task Name</label>
+                        <input type="text" id="task" name="task" placeholder="Enter task name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" name="description" placeholder="Enter task description">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="all" selected>All Categories</option>
+                    <option value="office">Office</option>
+                    <option value="home">Home</option>
+                    <option value="Health">Health</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="school">school</option>
+                    <option value="chores">chores</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <div class="priority-options">
+                            <label class="priority-option low">
+                                <input type="radio" name="priority" value="Low" required>
+                                <i class="fas fa-flag"></i> Low
+                            </label>
+                            <label class="priority-option medium">
+                                <input type="radio" name="priority" value="Medium" required>
+                                <i class="fas fa-flag"></i> Medium
+                            </label>
+                            <label class="priority-option high">
+                                <input type="radio" name="priority" value="High" required>
+                                <i class="fas fa-flag"></i> High
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-plus-circle"></i> Add Task
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</body>
+</html>

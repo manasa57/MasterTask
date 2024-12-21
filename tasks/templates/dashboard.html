@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MasterTask</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --accent: #FF5722;
+            --background: #F3F4F6;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border-color: #E0E0E0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #e0f7fa, #ffe0b2);
+            color: var(--text-primary);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(255, 255, 255, 0.9);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(76, 175, 80, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-links a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 7rem auto 3rem;
+            padding: 0 2rem;
+        }
+
+        .dashboard-header {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-dropdown {
+            padding: 0.8rem 2.5rem 0.8rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: #f4f6f9;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 180px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='%234b5563'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.2rem;
+        }
+
+        .filter-dropdown:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .add-task-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .add-task-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .task-table {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .task-table th {
+            background: #f4f6f9;
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .task-table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .task-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .task-table tr:hover {
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .priority-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .priority-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .category-badge {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .status-badge {
+            background: #ffebee;
+            color: #c62828;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-edit {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .btn-delete {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-secondary);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 0 1rem;
+                margin-top: 6rem;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+
+            .actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .filter-dropdown, .add-task-btn {
+                width: 100%;
+            }
+
+            .task-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-links a span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="/dashboard/" class="logo">
+            <i class="fas fa-check-circle"></i>
+            <span>MasterTask</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/dashboard/"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="/add-task/"><i class="fas fa-plus"></i> <span>Add Task</span></a></li>
+            <li><a href="/reports/"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+            <li><a href="/profile/"><i class="fas fa-user"></i> <span>Profile</span></a></li>
+        </ul>
+    </aside>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2><i class="fas fa-tasks"></i> Your Tasks</h2>
+            <div class="actions">
+                <select id="filter-category" class="filter-dropdown">
+                    <option value="all" selected>All Categories</option>
+                    <option value="office">Office</option>
+                    <option value="home">Home</option>
+                    <option value="Health">Health</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="school">school</option>
+                    <option value="chores">chores</option>
+                </select>
+                <a href="/add-task/" class="add-task-btn">
+                    <i class="fas fa-plus"></i> Add New Task
+                </a>
+            </div>
+        </div>
+        
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="task-body">
+                {% if tasks %}
+                    {% for task in tasks %}
+                        <tr data-category="{{ task.category }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ task.name }}</td>
+                            <td><span class="badge category-badge"><i class="fas fa-tag"></i> {{ task.category }}</span></td>
+                            <td>
+                                <span class="badge
+                                    {% if task.priority == 'High' %}priority-high
+                                    {% elif task.priority == 'Medium' %}priority-medium
+                                    {% elif task.priority == 'Low' %}priority-low
+                                    {% endif %}">
+                                    <i class="fas fa-flag"></i> {{ task.priority }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge status-badge" data-id="{{ task.id }}">
+                                    <i class="fas fa-clock"></i> {{ task.status|default:"Pending" }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{% url 'edit_task' task.id %}" style="text-decoration: none;">
+                                        <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                                    </a>
+                                    <form method="POST" action="{% url 'delete_task' task.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                                    </form>
+                                </div>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem;">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; color: var(--text-secondary);">
+                                <i class="fas fa-clipboard-list" style="font-size: 2rem;"></i>
+                                <p style="font-size: 1.1rem; margin: 0;">No tasks found. Click "Add New Task" to get started!</p>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>© 2024 MasterTask | Designed to make your life easier</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Filter tasks by category
+            const filterDropdown = document.getElementById("filter-category");
+            const taskBody = document.getElementById("task-body");
+    
+            // Filter tasks based on category selection
+            filterDropdown.addEventListener("change", function () {
+                const selectedCategory = this.value;
+    
+                Array.from(taskBody.children).forEach(row => {
+                    const taskCategory = row.getAttribute("data-category");
+    
+                    if (selectedCategory === "all" || taskCategory === selectedCategory) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
+    
+            // Toggle task status with animation
+            const statuses = document.querySelectorAll(".status-badge");
+            statuses.forEach(status => {
+                status.addEventListener("click", function () {
+                    let currentStatus = this.textContent.trim();
+                    let newStatus;
+    
+                    // Cycle through the statuses with color changes
+                    if (currentStatus === "Pending") {
+                        newStatus = "In Progress";
+                        this.style.background = "#eff6ff";
+                        this.style.color = "#2563eb";
+                    } else if (currentStatus === "In Progress") {
+                        newStatus = "Completed";
+                        this.style.background = "#f0fdf4";
+                        this.style.color = "#16a34a";
+                    } else {
+                        newStatus = "Pending";
+                        this.style.background = "#fef2f2";
+                        this.style.color = "#dc2626";
+                    }
+    
+                    // Update status with icon
+                    this.innerHTML = `<i class="fas ${newStatus === 'Completed' ? 'fa-check' : 'fa-clock'}"></i> ${newStatus}`;
+    
+                    // Add animation effect
+                    this.style.transform = "scale(1.1)";
+                    setTimeout(() => {
+                        this.style.transform = "scale(1)";
+                    }, 200);
+    
+                    // Send status update to the server
+                    fetch(`/update-status/${this.dataset.id}/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": csrfToken,
+                        },
+                        body: JSON.stringify({ status: newStatus }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.success) {
+                                alert("Failed to update status: " + data.error);
+                                // Revert the status if update failed
+                                this.textContent = currentStatus;
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Status update failed:", err);
+                            // Revert the status on error
+                            this.textContent = currentStatus;
+                        });
+                });
+            });
+
+            // Add hover effect to table rows
+            const tableRows = document.querySelectorAll("tbody tr");
+            tableRows.forEach(row => {
+                row.addEventListener("mouseenter", function() {
+                    this.style.transform = "translateX(5px)";
+                    this.style.transition = "transform 0.3s ease";
+                });
+                row.addEventListener("mouseleave", function() {
+                    this.style.transform = "translateX(0)";
+                });
+            });
+        });
+    </script>
+
+    <script>
+        const csrfToken = "{{ csrf_token }}";
+    </script>
+</body>
+</html>
